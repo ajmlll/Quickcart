@@ -87,16 +87,21 @@ npm run dev
 - Client scaffolded using Vite (React + TypeScript template).
 - Client dependencies installed: Tailwind CSS v4 (`@tailwindcss/vite`), React Router DOM (`react-router-dom`), and Redux Toolkit (`@reduxjs/toolkit`, `react-redux`).
 - Baseline Redux store (`client/src/store/store.ts`) and React Router setup configured.
-- Environment safety ensured with real `.env` added to `.gitignore`.
+- Created Mongoose schemas and models (`User`, `Product`, `Cart`) with indexes.
+- Implemented Authentication middleware (`requireAuth`, `requireAdmin`) and routes (`POST /auth/register`, `POST /auth/login`, `POST /auth/logout`) with Zod validation, bcrypt password hashing (12 rounds), auto-creation of empty user Cart on register, JWT signing (7-day expiry), and httpOnly cookie management.
+- Implemented Product management routes (`/products`):
+  - `GET /products` (Public: search regex filter, minPrice/maxPrice filtering, sorting by price/name/date).
+  - `POST /products` (Admin: Zod validation for name, category, price > 0, stock >= 0, image).
+  - `PATCH /products/:id` (Admin: ObjectId 400 validation, 404 handling, partial updates).
+  - `DELETE /products/:id` (Admin: ObjectId 400 validation, 404 handling, deletion confirmation).
+  - All handlers wrapped in `try/catch` passing unexpected errors to `next(err)`.
 
 ### 🟡 Partial
-- Express baseline error handler and basic health endpoint `/health` added.
+- Express baseline error handler and health endpoint `/health`.
 - Frontend App boilerplate with store wrapper.
 
 ### ⏳ What's Left
 - Database connection configuration (`mongoose.connect`).
-- Data models (User, Product, Order, Cart, Category, etc.).
-- Authentication & Authorization middleware (JWT verification, role-based checks).
-- API routes and controllers (Auth, Products, Cart, Orders, Admin).
+- Cart & Order API routes and controllers.
 - Client-side pages (Home, Shop, Product Detail, Cart, Checkout, Auth, Admin Dashboard).
 - Redux slices (Auth slice, Cart slice, Product slice).

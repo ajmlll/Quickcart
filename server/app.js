@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import authRoutes from './routes/auth.js';
+import productRoutes from './routes/products.js';
 
 dotenv.config();
 
@@ -25,6 +27,12 @@ app.use(cookieParser());
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok', message: 'QuickCart server is running' });
 });
+
+// Routes
+app.use('/auth', authRoutes);
+app.use('/products', productRoutes);
+
+
 
 // Centralized error-handling middleware (placeholder - last in the middleware chain)
 app.use((err, req, res, next) => {
