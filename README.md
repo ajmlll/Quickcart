@@ -97,19 +97,18 @@ npm run dev
   - `PATCH /products/:id` (Admin: ObjectId 400 validation, 404 handling, partial updates).
   - `DELETE /products/:id` (Admin: ObjectId 400 validation, 404 handling, deletion confirmation).
   - All handlers wrapped in `try/catch` passing unexpected errors to `next(err)`.
-- Implemented Cart management routes (`/cart` - all protected via `requireAuth`):
-  - `GET /cart` (Ownership-isolated fetch by `req.user._id`, populates products, calculates totals server-side dynamically).
-  - `POST /cart` (Adds or increments line quantity, checks stock limits, returns `409` if stock exceeded).
-  - `PATCH /cart/:productId` (Updates line quantity using product ID, validates positive integer & stock limits).
-  - `DELETE /cart/:productId` (Removes product line from user's cart).
-  - Enforced strict ownership-isolation guarantee (`{ user: req.user._id }`) across all queries.
+- Implemented Frontend Redux Toolkit & Routing Infrastructure:
+  - Created typed API fetch wrapper ([`client/src/lib/api.ts`](file:///c:/Users/muham/OneDrive/Desktop/Quickcart/client/src/lib/api.ts)) with `credentials: 'include'` and custom `ApiError` class.
+  - Implemented `authSlice` ([`client/src/store/authSlice.ts`](file:///c:/Users/muham/OneDrive/Desktop/Quickcart/client/src/store/authSlice.ts)) with `login`, `register`, `logout`, and `fetchCurrentUser` thunks.
+  - Implemented `cartSlice` ([`client/src/store/cartSlice.ts`](file:///c:/Users/muham/OneDrive/Desktop/Quickcart/client/src/store/cartSlice.ts)) with server-resyncing thunks (`fetchCart`, `addToCart`, `updateCartItem`, `removeFromCart`).
+  - Configured combined Redux store ([`client/src/store/store.ts`](file:///c:/Users/muham/OneDrive/Desktop/Quickcart/client/src/store/store.ts)) with custom typed hooks (`useAppDispatch`, `useAppSelector`).
+  - Created `ProtectedRoute` ([`client/src/components/ProtectedRoute.tsx`](file:///c:/Users/muham/OneDrive/Desktop/Quickcart/client/src/components/ProtectedRoute.tsx)) component with session loading state and login redirect.
+  - Configured React Router routes in `App.tsx` for `/`, `/login`, `/register`, and protected `/cart`, triggering `fetchCurrentUser()` on mount.
 
 ### 🟡 Partial
 - Express baseline error handler and health endpoint `/health`.
-- Frontend App boilerplate with store wrapper.
+- Frontend UI components and full page layouts.
 
 ### ⏳ What's Left
-- Database connection configuration (`mongoose.connect`).
 - Order API routes and controllers.
-- Client-side pages (Home, Shop, Product Detail, Cart, Checkout, Auth, Admin Dashboard).
-- Redux slices (Auth slice, Cart slice, Product slice).
+- Complete frontend UI views (Product Catalog, Product Detail, Checkout, Admin Dashboard).

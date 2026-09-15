@@ -143,15 +143,40 @@ export const login = async (req, res, next) => {
  * @desc    Logout user & clear cookie
  * @route   POST /auth/logout
  */
-export const logout = async (req, res) => {
-  res.clearCookie('token', {
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
-  });
+export const logout = async (req, res, next) => {
+  try {
+    res.clearCookie('token', {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+    });
 
-  res.status(200).json({
-    success: true,
-    message: 'Logged out successfully',
-  });
+    return res.status(200).json({
+      success: true,
+      message: 'Logged out successfully',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * @desc    Get currently logged in user info
+ * @route   GET /auth/me
+ * @access  Private
+ */
+export const getMe = async (req, res, next) => {
+  try {
+    return res.status(200).json({
+      success: true,
+      user: {
+        id: req.user._id,
+        name: req.user.name,
+        email: req.user.email,
+        role: req.user.role,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
 };

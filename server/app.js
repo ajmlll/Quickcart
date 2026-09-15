@@ -37,7 +37,15 @@ app.use('/cart', cartRoutes);
 
 
 
-// Centralized error-handling middleware (placeholder - last in the middleware chain)
+// 404 Fallback Middleware for unmapped routes
+app.use((req, res, next) => {
+  res.status(404).json({
+    success: false,
+    message: `Route ${req.originalUrl} not found`,
+  });
+});
+
+// Centralized error-handling middleware (last in the middleware chain)
 app.use((err, req, res, next) => {
   console.error('Unhandled Error:', err);
   const statusCode = err.statusCode || err.status || 500;
