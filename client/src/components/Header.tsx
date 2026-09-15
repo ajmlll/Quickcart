@@ -103,15 +103,9 @@ export const Header: React.FC = () => {
             <div className="flex items-center gap-3">
               <Link
                 to="/login"
-                className="px-4 py-2 rounded-xl text-sm font-semibold glass-btn-secondary"
+                className="px-4 py-2 rounded-xl text-sm font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition active:scale-95"
               >
                 Sign In
-              </Link>
-              <Link
-                to="/register"
-                className="px-4 py-2 rounded-xl text-sm font-medium bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition active:scale-95"
-              >
-                Get Started
               </Link>
             </div>
           )}
@@ -210,16 +204,9 @@ export const Header: React.FC = () => {
               <Link
                 to="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-4 py-2.5 rounded-xl glass-btn-secondary text-center text-sm font-semibold"
-              >
-                Sign In
-              </Link>
-              <Link
-                to="/register"
-                onClick={() => setMobileMenuOpen(false)}
                 className="px-4 py-2.5 rounded-xl bg-indigo-600 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-700 transition"
               >
-                Get Started
+                Sign In
               </Link>
             </div>
           )}
