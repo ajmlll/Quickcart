@@ -97,18 +97,17 @@ npm run dev
   - `PATCH /products/:id` (Admin: ObjectId 400 validation, 404 handling, partial updates).
   - `DELETE /products/:id` (Admin: ObjectId 400 validation, 404 handling, deletion confirmation).
   - All handlers wrapped in `try/catch` passing unexpected errors to `next(err)`.
-- Implemented Frontend Redux Toolkit & Routing Infrastructure:
-  - Created typed API fetch wrapper ([`client/src/lib/api.ts`](file:///c:/Users/muham/OneDrive/Desktop/Quickcart/client/src/lib/api.ts)) with `credentials: 'include'` and custom `ApiError` class.
-  - Implemented `authSlice` ([`client/src/store/authSlice.ts`](file:///c:/Users/muham/OneDrive/Desktop/Quickcart/client/src/store/authSlice.ts)) with `login`, `register`, `logout`, and `fetchCurrentUser` thunks.
-  - Implemented `cartSlice` ([`client/src/store/cartSlice.ts`](file:///c:/Users/muham/OneDrive/Desktop/Quickcart/client/src/store/cartSlice.ts)) with server-resyncing thunks (`fetchCart`, `addToCart`, `updateCartItem`, `removeFromCart`).
-  - Configured combined Redux store ([`client/src/store/store.ts`](file:///c:/Users/muham/OneDrive/Desktop/Quickcart/client/src/store/store.ts)) with custom typed hooks (`useAppDispatch`, `useAppSelector`).
-  - Created `ProtectedRoute` ([`client/src/components/ProtectedRoute.tsx`](file:///c:/Users/muham/OneDrive/Desktop/Quickcart/client/src/components/ProtectedRoute.tsx)) component with session loading state and login redirect.
-  - Configured React Router routes in `App.tsx` for `/`, `/login`, `/register`, and protected `/cart`, triggering `fetchCurrentUser()` on mount.
+- Implemented Product Grid Home Page ([`client/src/pages/HomePage.tsx`](file:///c:/Users/muham/OneDrive/Desktop/Quickcart/client/src/pages/HomePage.tsx)):
+  - Product cards showcasing image, name, category, price, and stock info.
+  - Debounced search input (300ms) re-fetching `GET /products?search=...`.
+  - Sort dropdown wired to query params (`price_asc`, `price_desc`, `name_asc`, `name_desc`).
+  - Stock validation: disables "Add to Cart" and displays an "Out of Stock" badge when stock is `0`.
+  - Auth-gated Add to Cart: dispatches `addToCart` thunk for logged-in users, redirects unauthenticated users to `/login`.
+  - Distinct UI handling for Loading (animated skeleton grid), Empty Results ("No products match"), and Fetch Error states.
 
 ### 🟡 Partial
 - Express baseline error handler and health endpoint `/health`.
-- Frontend UI components and full page layouts.
 
 ### ⏳ What's Left
 - Order API routes and controllers.
-- Complete frontend UI views (Product Catalog, Product Detail, Checkout, Admin Dashboard).
+- Checkout flow & Admin dashboard features.

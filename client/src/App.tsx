@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { useAppDispatch, fetchCurrentUser } from './store';
+import Header from './components/Header';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -11,24 +12,28 @@ export const App: React.FC = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    // Dispatch fetchCurrentUser once on app mount
     dispatch(fetchCurrentUser());
   }, [dispatch]);
 
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
-      <Route
-        path="/cart"
-        element={
-          <ProtectedRoute>
-            <CartPage />
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+      <Header />
+      <main className="flex-1">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route
+            path="/cart"
+            element={
+              <ProtectedRoute>
+                <CartPage />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </main>
+    </div>
   );
 };
 

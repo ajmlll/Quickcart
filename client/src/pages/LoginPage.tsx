@@ -1,78 +1,132 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector, login } from '../store';
+import { useAppDispatch, useAppSelector, login, clearError } from '../store';
 
 export const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [clientError, setClientError] = useState<string | null>(null);
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { status, error } = useAppSelector((state) => state.auth);
+  const { status, error, user } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    dispatch(clearError());
+  }, [dispatch]);
+
+  // If user is already authenticated, redirect to product grid
+  useEffect(() => {
+    if (user) {
+      navigate('/', { replace: true });
+    }
+  }, [user, navigate]);
+
+  const validate = (): boolean => {
+    if (!email.trim()) {
+      setClientError('Email address is required.');
+      return false;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      setClientError('Please enter a valid email address.');
+      return false;
+    }
+    if (!password) {
+      setClientError('Password is required.');
+      return false;
+    }
+    setClientError(null);
+    return true;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const result = await dispatch(login({ email, password }));
+    if (!validate()) return;
+
+    const result = await dispatch(login({ email: email.trim(), password }));
     if (login.fulfilled.match(result)) {
       navigate('/');
     }
   };
 
+  const activeError = clientError || error;
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-6">
-      <div className="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl space-y-6">
+    <div className="min-h-[calc(100vh-4rem)] bg-slate-950 text-slate-100 flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-slate-900/90 border border-slate-800 rounded-3xl p-8 shadow-2xl space-y-6 backdrop-blur-xl">
         <div className="text-center space-y-2">
-          <h1 className="text-2xl font-bold text-white">Sign In</h1>
-          <p className="text-slate-400 text-sm">Enter your credentials to access QuickCart</p>
+          <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center text-2xl mx-auto mb-3">
+            🔑
+          </div>
+          <h1 className="text-2xl font-bold text-white tracking-tight">Welcome Back</h1>
+          <p className="text-slate-400 text-sm">Sign in to manage your QuickCart account</p>
         </div>
 
-        {error && (
-          <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 text-sm">
-            {error}
+        {/* Visible Alert Area for Client & Server Errors */}
+        {activeError && (
+          <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-sm space-y-1">
+            <div className="flex items-center gap-2 font-semibold">
+              <span>⚠️</span>
+              <span>Authentication Error</span>
+            </div>
+            <p className="text-xs text-rose-300/90 leading-relaxed">{activeError}</p>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
               Email Address
             </label>
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-indigo-500 text-sm"
-              placeholder="user@example.com"
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (clientError) setClientError(null);
+              }}
+              placeholder="admin@example.com"
+              className="w-full px-4 py-3 bg-slate-800/80 border border-slate-700/80 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-sm transition"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
               Password
             </label>
             <input
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-indigo-500 text-sm"
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (clientError) setClientError(null);
+              }}
               placeholder="••••••••"
+              className="w-full px-4 py-3 bg-slate-800/80 border border-slate-700/80 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-sm transition"
             />
           </div>
 
           <button
             type="submit"
             disabled={status === 'loading'}
-            className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-medium rounded-xl text-sm transition shadow-lg shadow-indigo-600/20"
+            className="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 disabled:opacity-50 text-white font-semibold rounded-xl text-sm transition shadow-lg shadow-indigo-600/25 flex items-center justify-center gap-2"
           >
-            {status === 'loading' ? 'Signing in...' : 'Sign In'}
+            {status === 'loading' ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <span>Signing in...</span>
+              </>
+            ) : (
+              'Sign In'
+            )}
           </button>
         </form>
 
-        <p className="text-center text-xs text-slate-400">
-          Don't have an account?{' '}
-          <Link to="/register" className="text-indigo-400 hover:underline">
-            Register here
+        <p className="text-center text-xs text-slate-400 pt-2">
+          Don't have an account yet?{' '}
+          <Link to="/register" className="text-indigo-400 font-medium hover:underline">
+            Register now
           </Link>
         </p>
       </div>

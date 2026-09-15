@@ -1,14 +1,6 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
 import { api, ApiError } from '../lib/api';
-
-export interface Product {
-  _id: string;
-  name: string;
-  category: string;
-  price: number;
-  stock: number;
-  image: string;
-}
+import type { Product } from './productSlice';
 
 export interface CartItem {
   product: Product;
