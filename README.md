@@ -42,6 +42,9 @@ npm install
 cp .env.example .env
 # Update .env with your local or remote MONGO_URI, JWT_SECRET, etc.
 
+# Seed database with initial products and admin account
+npm run seed
+
 # Start development server
 npm run dev
 ```
@@ -62,11 +65,10 @@ npm run dev
 
 ## Admin Credentials
 
-> [!NOTE]
-> Admin user seeding/initialization will be added when user authentication and role management are implemented.
+- **Email:** `admin@example.com`
+- **Password:** `Admin123!`
+- **Role:** `admin`
 
-- **Email:** `admin@quickcart.com` *(Placeholder)*
-- **Password:** `Admin@123` *(Placeholder)*
 
 ---
 
