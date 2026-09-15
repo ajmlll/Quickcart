@@ -15,7 +15,7 @@ export const Header: React.FC = () => {
   const handleLogout = async () => {
     setMobileMenuOpen(false);
     await dispatch(logout());
-    navigate('/login');
+    navigate('/');
   };
 
   return (
