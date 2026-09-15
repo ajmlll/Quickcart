@@ -15,7 +15,6 @@ export const LoginPage: React.FC = () => {
     dispatch(clearError());
   }, [dispatch]);
 
-  // If user is already authenticated, redirect to product grid
   useEffect(() => {
     if (user) {
       navigate('/', { replace: true });
@@ -53,30 +52,30 @@ export const LoginPage: React.FC = () => {
   const activeError = clientError || error;
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-slate-950 text-slate-100 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-slate-900/90 border border-slate-800 rounded-3xl p-8 shadow-2xl space-y-6 backdrop-blur-xl">
+    <div className="min-h-[calc(100vh-4rem)] bg-neutral-50 text-neutral-900 flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-white border border-neutral-200/80 rounded-2xl p-8 shadow-sm space-y-6">
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center text-2xl mx-auto mb-3">
+          <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-2xl mx-auto mb-3">
             🔑
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Welcome Back</h1>
-          <p className="text-slate-400 text-sm">Sign in to manage your QuickCart account</p>
+          <h1 className="text-2xl font-bold text-neutral-900 tracking-tight">Welcome Back</h1>
+          <p className="text-neutral-500 text-sm">Sign in to manage your QuickCart account</p>
         </div>
 
         {/* Visible Alert Area for Client & Server Errors */}
         {activeError && (
-          <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-sm space-y-1">
+          <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-sm space-y-1">
             <div className="flex items-center gap-2 font-semibold">
               <span>⚠️</span>
               <span>Authentication Error</span>
             </div>
-            <p className="text-xs text-rose-300/90 leading-relaxed">{activeError}</p>
+            <p className="text-xs text-rose-600 leading-relaxed">{activeError}</p>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+            <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-1.5">
               Email Address
             </label>
             <input
@@ -87,12 +86,12 @@ export const LoginPage: React.FC = () => {
                 if (clientError) setClientError(null);
               }}
               placeholder="admin@example.com"
-              className="w-full px-4 py-3 bg-slate-800/80 border border-slate-700/80 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-sm transition"
+              className="w-full px-4 py-3 bg-white border border-neutral-300 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 rounded-xl text-neutral-900 placeholder-neutral-400 text-sm transition"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
+            <label className="block text-xs font-semibold text-neutral-700 uppercase tracking-wider mb-1.5">
               Password
             </label>
             <input
@@ -103,14 +102,14 @@ export const LoginPage: React.FC = () => {
                 if (clientError) setClientError(null);
               }}
               placeholder="••••••••"
-              className="w-full px-4 py-3 bg-slate-800/80 border border-slate-700/80 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-sm transition"
+              className="w-full px-4 py-3 bg-white border border-neutral-300 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 rounded-xl text-neutral-900 placeholder-neutral-400 text-sm transition"
             />
           </div>
 
           <button
             type="submit"
             disabled={status === 'loading'}
-            className="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 disabled:opacity-50 text-white font-semibold rounded-xl text-sm transition shadow-lg shadow-indigo-600/25 flex items-center justify-center gap-2"
+            className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-medium rounded-xl text-sm transition shadow-xs flex items-center justify-center gap-2 cursor-pointer"
           >
             {status === 'loading' ? (
               <>
@@ -123,9 +122,9 @@ export const LoginPage: React.FC = () => {
           </button>
         </form>
 
-        <p className="text-center text-xs text-slate-400 pt-2">
+        <p className="text-center text-xs text-neutral-500 pt-2">
           Don't have an account yet?{' '}
-          <Link to="/register" className="text-indigo-400 font-medium hover:underline">
+          <Link to="/register" className="text-indigo-600 font-medium hover:underline">
             Register now
           </Link>
         </p>

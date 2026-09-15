@@ -11,10 +11,10 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-4 font-sans">
-        <div className="flex flex-col items-center space-y-4">
-          <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-slate-400 text-sm font-medium">Checking session...</p>
+      <div className="min-h-[calc(100vh-4rem)] bg-neutral-50 text-neutral-900 flex items-center justify-center p-4 font-sans">
+        <div className="flex flex-col items-center space-y-3 bg-white p-8 rounded-2xl border border-neutral-200/80 shadow-sm">
+          <div className="w-8 h-8 border-3 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-neutral-600 text-sm font-medium">Checking authentication...</p>
         </div>
       </div>
     );

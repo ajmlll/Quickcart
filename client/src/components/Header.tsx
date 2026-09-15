@@ -19,28 +19,28 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80">
+    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-neutral-200/80 shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand Logo */}
         <Link
           to="/"
-          className="flex items-center gap-2 group"
+          className="flex items-center gap-2.5 group"
           onClick={() => setMobileMenuOpen(false)}
         >
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white font-extrabold text-lg shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition-transform">
+          <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-black text-lg shadow-sm group-hover:bg-indigo-700 transition-colors">
             ⚡
           </div>
-          <span className="text-xl font-bold bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+          <span className="text-xl font-black tracking-tight text-neutral-900">
             QuickCart
           </span>
         </Link>
 
-        {/* Desktop Navigation (>= 768px) */}
-        <div className="hidden md:flex items-center gap-4">
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-5">
           <Link
             to="/"
             className={`text-sm font-medium transition ${
-              location.pathname === '/' ? 'text-white' : 'text-slate-400 hover:text-slate-200'
+              location.pathname === '/' ? 'text-indigo-600 font-semibold' : 'text-neutral-600 hover:text-neutral-900'
             }`}
           >
             Catalog
@@ -50,47 +50,47 @@ export const Header: React.FC = () => {
             <>
               <Link
                 to="/cart"
-                className="relative px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/60 transition flex items-center gap-2 text-sm font-medium"
+                className="relative px-3.5 py-2 rounded-xl text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100 transition flex items-center gap-2 text-sm font-medium border border-transparent hover:border-neutral-200"
                 title="View Shopping Cart"
               >
                 <span>🛒</span>
                 <span>Cart</span>
                 {cartItemCount > 0 && (
-                  <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-indigo-500 text-white shadow-md">
+                  <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-indigo-600 text-white shadow-xs">
                     {cartItemCount}
                   </span>
                 )}
               </Link>
 
-              <div className="h-4 w-px bg-slate-800"></div>
+              <div className="h-4 w-px bg-neutral-200"></div>
 
               <div className="flex items-center gap-3">
-                <span className="text-sm font-medium text-slate-300">
-                  Hi, <strong className="text-white">{user.name}</strong>
+                <span className="text-sm font-medium text-neutral-700">
+                  Hi, <strong className="text-neutral-900">{user.name}</strong>
                 </span>
-                <span className="text-xs px-2 py-0.5 rounded-md font-semibold bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 uppercase">
+                <span className="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-indigo-50 border border-indigo-100 text-indigo-700 uppercase tracking-wider">
                   {user.role}
                 </span>
 
                 <button
                   onClick={handleLogout}
-                  className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700/80 text-slate-200 border border-slate-700/60 transition cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-xl text-xs font-medium bg-white hover:bg-neutral-100 text-neutral-700 border border-neutral-200 transition cursor-pointer shadow-xs"
                 >
                   Logout
                 </button>
               </div>
             </>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <Link
                 to="/login"
-                className="px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition"
+                className="px-4 py-2 rounded-xl text-sm font-medium text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100 transition"
               >
                 Sign In
               </Link>
               <Link
                 to="/register"
-                className="px-4 py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white shadow-lg shadow-indigo-600/20 transition"
+                className="px-4 py-2 rounded-xl text-sm font-medium bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition"
               >
                 Get Started
               </Link>
@@ -98,17 +98,17 @@ export const Header: React.FC = () => {
           )}
         </div>
 
-        {/* Mobile Header Quick Actions & Hamburger (< 768px) */}
+        {/* Mobile Actions & Hamburger */}
         <div className="flex items-center gap-3 md:hidden">
           {user && (
             <Link
               to="/cart"
               onClick={() => setMobileMenuOpen(false)}
-              className="relative p-2 text-slate-300 hover:text-white"
+              className="relative p-2 text-neutral-700 hover:text-neutral-900"
             >
               <span className="text-xl">🛒</span>
               {cartItemCount > 0 && (
-                <span className="absolute -top-1 -right-1 px-1.5 py-0.5 text-[10px] font-bold rounded-full bg-indigo-500 text-white shadow-md">
+                <span className="absolute -top-1 -right-1 px-1.5 py-0.5 text-[10px] font-bold rounded-full bg-indigo-600 text-white shadow-xs">
                   {cartItemCount}
                 </span>
               )}
@@ -117,7 +117,7 @@ export const Header: React.FC = () => {
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white border border-slate-700/60 focus:outline-none"
+            className="p-2 rounded-xl bg-neutral-100 text-neutral-700 hover:text-neutral-900 border border-neutral-200 focus:outline-none"
             aria-label="Toggle Navigation Menu"
           >
             {mobileMenuOpen ? '✕' : '☰'}
@@ -125,18 +125,18 @@ export const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Drawer Menu (375px - 767px) */}
+      {/* Mobile Drawer Menu (White theme) */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-slate-900 border-b border-slate-800 px-4 py-4 space-y-3">
+        <div className="md:hidden bg-white border-b border-neutral-200 px-4 py-4 space-y-3 shadow-md">
           {user ? (
             <div className="space-y-3">
-              <div className="p-3 bg-slate-800/60 rounded-xl border border-slate-700/50 flex items-center justify-between">
+              <div className="p-3 bg-neutral-50 rounded-xl border border-neutral-200 flex items-center justify-between">
                 <div>
-                  <span className="block text-xs text-slate-400">Signed in as</span>
-                  <span className="text-sm font-bold text-white">{user.name}</span>
-                  <span className="text-xs text-slate-400 block">{user.email}</span>
+                  <span className="block text-xs text-neutral-500">Signed in as</span>
+                  <span className="text-sm font-bold text-neutral-900">{user.name}</span>
+                  <span className="text-xs text-neutral-500 block">{user.email}</span>
                 </div>
-                <span className="text-xs px-2 py-0.5 rounded font-semibold bg-indigo-500/20 text-indigo-300 uppercase">
+                <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100 uppercase">
                   {user.role}
                 </span>
               </div>
@@ -145,14 +145,14 @@ export const Header: React.FC = () => {
                 <Link
                   to="/"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="px-4 py-2.5 rounded-xl bg-slate-800 text-center text-sm font-medium text-slate-200"
+                  className="px-4 py-2.5 rounded-xl bg-neutral-100 text-center text-sm font-medium text-neutral-800 hover:bg-neutral-200"
                 >
                   Catalog
                 </Link>
                 <Link
                   to="/cart"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="px-4 py-2.5 rounded-xl bg-indigo-600/20 text-center text-sm font-medium text-indigo-300 border border-indigo-500/30"
+                  className="px-4 py-2.5 rounded-xl bg-indigo-50 text-center text-sm font-semibold text-indigo-700 border border-indigo-100"
                 >
                   Cart ({cartItemCount})
                 </Link>
@@ -160,7 +160,7 @@ export const Header: React.FC = () => {
 
               <button
                 onClick={handleLogout}
-                className="w-full py-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 text-sm font-medium transition"
+                className="w-full py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-sm font-medium transition"
               >
                 Log Out
               </button>
@@ -170,21 +170,21 @@ export const Header: React.FC = () => {
               <Link
                 to="/"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-4 py-2.5 rounded-xl bg-slate-800/80 text-center text-sm font-medium text-slate-200"
+                className="px-4 py-2.5 rounded-xl bg-neutral-50 text-center text-sm font-medium text-neutral-800 border border-neutral-200"
               >
                 Browse Catalog
               </Link>
               <Link
                 to="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-4 py-2.5 rounded-xl bg-slate-800 text-center text-sm font-medium text-white border border-slate-700"
+                className="px-4 py-2.5 rounded-xl bg-white text-center text-sm font-medium text-neutral-800 border border-neutral-200"
               >
                 Sign In
               </Link>
               <Link
                 to="/register"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-center text-sm font-semibold text-white shadow-lg"
+                className="px-4 py-2.5 rounded-xl bg-indigo-600 text-center text-sm font-semibold text-white shadow-xs"
               >
                 Get Started
               </Link>
