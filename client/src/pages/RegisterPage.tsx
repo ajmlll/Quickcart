@@ -19,7 +19,11 @@ export const RegisterPage: React.FC = () => {
 
   useEffect(() => {
     if (user) {
-      navigate('/shop', { replace: true });
+      if (user.role === 'admin') {
+        navigate('/admin', { replace: true });
+      } else {
+        navigate('/shop', { replace: true });
+      }
     }
   }, [user, navigate]);
 
@@ -59,7 +63,12 @@ export const RegisterPage: React.FC = () => {
 
     const result = await dispatch(register({ name: name.trim(), email: email.trim(), password }));
     if (register.fulfilled.match(result)) {
-      navigate('/shop');
+      const registeredUser = result.payload;
+      if (registeredUser?.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/shop');
+      }
     }
   };
 

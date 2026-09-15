@@ -18,7 +18,11 @@ export const LoginPage: React.FC = () => {
 
   useEffect(() => {
     if (user) {
-      navigate('/shop', { replace: true });
+      if (user.role === 'admin') {
+        navigate('/admin', { replace: true });
+      } else {
+        navigate('/shop', { replace: true });
+      }
     }
   }, [user, navigate]);
 
@@ -46,7 +50,12 @@ export const LoginPage: React.FC = () => {
 
     const result = await dispatch(login({ email: email.trim(), password }));
     if (login.fulfilled.match(result)) {
-      navigate('/shop');
+      const loggedInUser = result.payload;
+      if (loggedInUser?.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/shop');
+      }
     }
   };
 

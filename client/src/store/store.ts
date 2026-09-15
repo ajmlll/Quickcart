@@ -3,12 +3,14 @@ import { useDispatch, useSelector, type TypedUseSelectorHook } from 'react-redux
 import authReducer from './authSlice';
 import cartReducer from './cartSlice';
 import productReducer from './productSlice';
+import adminProductsReducer from './adminProductsSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     cart: cartReducer,
     products: productReducer,
+    adminProducts: adminProductsReducer,
   },
 });
 

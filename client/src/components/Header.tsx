@@ -57,6 +57,19 @@ export const Header: React.FC = () => {
           >
             Shop
           </Link>
+          {user && user.role === 'admin' && (
+            <Link
+              to="/admin"
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition flex items-center gap-1.5 ${
+                location.pathname === '/admin'
+                  ? 'text-indigo-600 bg-indigo-50/80 font-bold border border-indigo-100/60 shadow-xs'
+                  : 'text-neutral-700 hover:text-neutral-900 hover:bg-white/60'
+              }`}
+            >
+              <span>⚡</span>
+              <span>Admin</span>
+            </Link>
+          )}
         </nav>
 
         {/* Far Right Auth-Aware Controls */}
@@ -141,11 +154,11 @@ export const Header: React.FC = () => {
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-white/90 backdrop-blur-lg border-b border-white/80 px-4 py-4 space-y-3 shadow-md">
-          <div className="grid grid-cols-2 gap-2">
+          <div className={`grid gap-2 ${user && user.role === 'admin' ? 'grid-cols-3' : 'grid-cols-2'}`}>
             <Link
               to="/"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block px-4 py-2.5 rounded-xl text-center text-sm font-medium transition ${
+              className={`block px-3 py-2.5 rounded-xl text-center text-xs font-medium transition ${
                 location.pathname === '/'
                   ? 'bg-indigo-50 text-indigo-700 font-bold border border-indigo-100'
                   : 'bg-white/60 text-neutral-800 border border-white/80'
@@ -157,7 +170,7 @@ export const Header: React.FC = () => {
             <Link
               to="/shop"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block px-4 py-2.5 rounded-xl text-center text-sm font-medium transition ${
+              className={`block px-3 py-2.5 rounded-xl text-center text-xs font-medium transition ${
                 location.pathname === '/shop'
                   ? 'bg-indigo-50 text-indigo-700 font-bold border border-indigo-100'
                   : 'bg-white/60 text-neutral-800 border border-white/80'
@@ -165,6 +178,20 @@ export const Header: React.FC = () => {
             >
               🛍️ Shop
             </Link>
+
+            {user && user.role === 'admin' && (
+              <Link
+                to="/admin"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`block px-3 py-2.5 rounded-xl text-center text-xs font-bold transition ${
+                  location.pathname === '/admin'
+                    ? 'bg-indigo-50 text-indigo-700 border border-indigo-100'
+                    : 'bg-white/60 text-neutral-800 border border-white/80'
+                }`}
+              >
+                ⚡ Admin
+              </Link>
+            )}
           </div>
 
           {user ? (
