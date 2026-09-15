@@ -1,13 +1,13 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
+import connectDB from './db.js';
 import Product from './models/Product.js';
 import User from './models/User.js';
 import Cart from './models/Cart.js';
 
 dotenv.config();
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/quickcart';
 const SALT_ROUNDS = 12;
 
 const seedProducts = [
@@ -33,9 +33,7 @@ const seedProducts = [
 
 async function seedDatabase() {
   try {
-    console.log('Connecting to MongoDB...');
-    await mongoose.connect(MONGO_URI);
-    console.log('Connected to MongoDB successfully.');
+    await connectDB();
 
     // Clear existing products
     console.log('Clearing existing products...');
