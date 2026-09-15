@@ -1,0 +1,48 @@
+import express from 'express';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const app = express();
+
+// CORS configuration
+const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
+app.use(
+  cors({
+    origin: clientOrigin,
+    credentials: true,
+  })
+);
+
+// Body parsing & cookie parsing middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+// Base health / placeholder check
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', message: 'QuickCart server is running' });
+});
+
+// Centralized error-handling middleware (placeholder - last in the middleware chain)
+app.use((err, req, res, next) => {
+  console.error('Unhandled Error:', err);
+  const statusCode = err.statusCode || err.status || 500;
+  res.status(statusCode).json({
+    success: false,
+    message: err.message || 'Internal Server Error',
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+  });
+});
+
+const PORT = process.env.PORT || 5000;
+
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
+
+export default app;
