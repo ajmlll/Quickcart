@@ -17,7 +17,7 @@ export const LoginPage: React.FC = () => {
 
   useEffect(() => {
     if (user) {
-      navigate('/', { replace: true });
+      navigate('/shop', { replace: true });
     }
   }, [user, navigate]);
 
@@ -45,7 +45,7 @@ export const LoginPage: React.FC = () => {
 
     const result = await dispatch(login({ email: email.trim(), password }));
     if (login.fulfilled.match(result)) {
-      navigate('/');
+      navigate('/shop');
     }
   };
 

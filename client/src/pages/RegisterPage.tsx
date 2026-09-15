@@ -18,7 +18,7 @@ export const RegisterPage: React.FC = () => {
 
   useEffect(() => {
     if (user) {
-      navigate('/', { replace: true });
+      navigate('/shop', { replace: true });
     }
   }, [user, navigate]);
 
@@ -58,7 +58,7 @@ export const RegisterPage: React.FC = () => {
 
     const result = await dispatch(register({ name: name.trim(), email: email.trim(), password }));
     if (register.fulfilled.match(result)) {
-      navigate('/');
+      navigate('/shop');
     }
   };
 

@@ -56,7 +56,7 @@ export const CartPage: React.FC = () => {
             )}
           </div>
           <Link
-            to="/"
+            to="/shop"
             className="inline-flex items-center gap-1.5 text-sm font-medium text-indigo-600 hover:text-indigo-700 transition"
           >
             <span>←</span>
@@ -129,7 +129,7 @@ export const CartPage: React.FC = () => {
               </p>
             </div>
             <Link
-              to="/"
+              to="/shop"
               className="inline-block px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm transition shadow-xs"
             >
               Browse Catalog
