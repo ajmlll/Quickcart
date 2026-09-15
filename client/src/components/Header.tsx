@@ -36,22 +36,27 @@ export const Header: React.FC = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-5">
-          <Link
-            to="/"
-            className={`text-sm font-medium transition ${
-              location.pathname === '/' ? 'text-indigo-600 font-semibold' : 'text-neutral-600 hover:text-neutral-900'
-            }`}
-          >
-            Catalog
-          </Link>
+        <div className="hidden md:flex items-center gap-6">
+          <nav className="flex items-center gap-1">
+            <Link
+              to="/"
+              className={`px-3.5 py-2 rounded-xl text-sm font-medium transition ${
+                location.pathname === '/'
+                  ? 'text-indigo-600 bg-indigo-50/70 font-semibold'
+                  : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100/70'
+              }`}
+            >
+              Home
+            </Link>
 
-          {user ? (
-            <>
+            {user && (
               <Link
                 to="/cart"
-                className="relative px-3.5 py-2 rounded-xl text-neutral-700 hover:text-neutral-900 hover:bg-neutral-100 transition flex items-center gap-2 text-sm font-medium border border-transparent hover:border-neutral-200"
-                title="View Shopping Cart"
+                className={`px-3.5 py-2 rounded-xl text-sm font-medium transition flex items-center gap-2 ${
+                  location.pathname === '/cart'
+                    ? 'text-indigo-600 bg-indigo-50/70 font-semibold'
+                    : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100/70'
+                }`}
               >
                 <span>🛒</span>
                 <span>Cart</span>
@@ -61,25 +66,29 @@ export const Header: React.FC = () => {
                   </span>
                 )}
               </Link>
+            )}
+          </nav>
 
-              <div className="h-4 w-px bg-neutral-200"></div>
+          <div className="h-5 w-px bg-neutral-200/80"></div>
 
-              <div className="flex items-center gap-3">
+          {user ? (
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-neutral-50 rounded-xl border border-neutral-200/60">
                 <span className="text-sm font-medium text-neutral-700">
                   Hi, <strong className="text-neutral-900">{user.name}</strong>
                 </span>
-                <span className="text-xs px-2.5 py-0.5 rounded-full font-semibold bg-indigo-50 border border-indigo-100 text-indigo-700 uppercase tracking-wider">
+                <span className="text-[10px] px-2 py-0.5 rounded-md font-bold bg-indigo-100 text-indigo-800 uppercase tracking-wider">
                   {user.role}
                 </span>
-
-                <button
-                  onClick={handleLogout}
-                  className="px-3.5 py-1.5 rounded-xl text-xs font-medium bg-white hover:bg-neutral-100 text-neutral-700 border border-neutral-200 transition cursor-pointer shadow-xs"
-                >
-                  Logout
-                </button>
               </div>
-            </>
+
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 rounded-xl text-xs font-semibold bg-white hover:bg-neutral-100 text-neutral-700 border border-neutral-200 transition cursor-pointer shadow-xs active:scale-95"
+              >
+                Logout
+              </button>
+            </div>
           ) : (
             <div className="flex items-center gap-3">
               <Link
@@ -90,7 +99,7 @@ export const Header: React.FC = () => {
               </Link>
               <Link
                 to="/register"
-                className="px-4 py-2 rounded-xl text-sm font-medium bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition"
+                className="px-4 py-2 rounded-xl text-sm font-medium bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition active:scale-95"
               >
                 Get Started
               </Link>
@@ -125,11 +134,23 @@ export const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Drawer Menu (White theme) */}
+      {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-white border-b border-neutral-200 px-4 py-4 space-y-3 shadow-md">
+          <Link
+            to="/"
+            onClick={() => setMobileMenuOpen(false)}
+            className={`block px-4 py-2.5 rounded-xl text-sm font-medium transition ${
+              location.pathname === '/'
+                ? 'bg-indigo-50 text-indigo-700 font-semibold'
+                : 'bg-neutral-50 text-neutral-800 hover:bg-neutral-100'
+            }`}
+          >
+            🏠 Home
+          </Link>
+
           {user ? (
-            <div className="space-y-3">
+            <div className="space-y-3 pt-1 border-t border-neutral-100">
               <div className="p-3 bg-neutral-50 rounded-xl border border-neutral-200 flex items-center justify-between">
                 <div>
                   <span className="block text-xs text-neutral-500">Signed in as</span>
@@ -141,32 +162,27 @@ export const Header: React.FC = () => {
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 pt-1">
-                <Link
-                  to="/"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="px-4 py-2.5 rounded-xl bg-neutral-100 text-center text-sm font-medium text-neutral-800 hover:bg-neutral-200"
-                >
-                  Catalog
-                </Link>
-                <Link
-                  to="/cart"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="px-4 py-2.5 rounded-xl bg-indigo-50 text-center text-sm font-semibold text-indigo-700 border border-indigo-100"
-                >
-                  Cart ({cartItemCount})
-                </Link>
-              </div>
+              <Link
+                to="/cart"
+                onClick={() => setMobileMenuOpen(false)}
+                className={`block px-4 py-2.5 rounded-xl text-sm font-semibold transition ${
+                  location.pathname === '/cart'
+                    ? 'bg-indigo-50 text-indigo-700 border border-indigo-100'
+                    : 'bg-neutral-50 text-neutral-800 hover:bg-neutral-100'
+                }`}
+              >
+                🛒 Cart ({cartItemCount})
+              </Link>
 
               <button
                 onClick={handleLogout}
-                className="w-full py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-sm font-medium transition"
+                className="w-full py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-sm font-medium transition cursor-pointer"
               >
                 Log Out
               </button>
             </div>
           ) : (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 pt-1 border-t border-neutral-100">
               <Link
                 to="/"
                 onClick={() => setMobileMenuOpen(false)}
@@ -184,7 +200,7 @@ export const Header: React.FC = () => {
               <Link
                 to="/register"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-4 py-2.5 rounded-xl bg-indigo-600 text-center text-sm font-semibold text-white shadow-xs"
+                className="px-4 py-2.5 rounded-xl bg-indigo-600 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-700 transition"
               >
                 Get Started
               </Link>
