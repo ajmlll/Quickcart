@@ -106,12 +106,9 @@ export const Header: React.FC = () => {
 
               <div className="h-5 w-px bg-neutral-300/60"></div>
 
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-white/60 rounded-xl border border-white/80 shadow-xs">
+              <div className="flex items-center gap-2 px-3.5 py-1.5 bg-white/60 rounded-xl border border-white/80 shadow-xs">
                 <span className="text-sm font-medium text-neutral-700">
                   Hi, <strong className="text-neutral-900">{user.name}</strong>
-                </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-md font-bold bg-indigo-100 text-indigo-800 uppercase tracking-wider">
-                  {user.role}
                 </span>
               </div>
 
@@ -206,15 +203,10 @@ export const Header: React.FC = () => {
 
           {user ? (
             <div className="space-y-3 pt-2 border-t border-neutral-200/60">
-              <div className="p-3 bg-white/70 rounded-xl border border-white/90 flex items-center justify-between">
-                <div>
-                  <span className="block text-xs text-neutral-500">Signed in as</span>
-                  <span className="text-sm font-bold text-neutral-900">{user.name}</span>
-                  <span className="text-xs text-neutral-500 block">{user.email}</span>
-                </div>
-                <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100 uppercase">
-                  {user.role}
-                </span>
+              <div className="p-3 bg-white/70 rounded-xl border border-white/90">
+                <span className="block text-xs text-neutral-500 font-semibold">Signed in as</span>
+                <span className="text-sm font-extrabold text-neutral-900">{user.name}</span>
+                <span className="text-xs text-neutral-500 block">{user.email}</span>
               </div>
 
               <Link
