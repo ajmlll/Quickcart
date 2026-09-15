@@ -17,7 +17,7 @@ export const App: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <div className="min-h-screen bg-neutral-50 text-neutral-900 flex flex-col font-sans">
+    <div className="min-h-screen bg-transparent text-neutral-900 flex flex-col font-sans">
       <Header />
       <main className="flex-1">
         <Routes>
