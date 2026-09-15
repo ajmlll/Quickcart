@@ -95,6 +95,12 @@ npm run dev
   - `PATCH /products/:id` (Admin: ObjectId 400 validation, 404 handling, partial updates).
   - `DELETE /products/:id` (Admin: ObjectId 400 validation, 404 handling, deletion confirmation).
   - All handlers wrapped in `try/catch` passing unexpected errors to `next(err)`.
+- Implemented Cart management routes (`/cart` - all protected via `requireAuth`):
+  - `GET /cart` (Ownership-isolated fetch by `req.user._id`, populates products, calculates totals server-side dynamically).
+  - `POST /cart` (Adds or increments line quantity, checks stock limits, returns `409` if stock exceeded).
+  - `PATCH /cart/:productId` (Updates line quantity using product ID, validates positive integer & stock limits).
+  - `DELETE /cart/:productId` (Removes product line from user's cart).
+  - Enforced strict ownership-isolation guarantee (`{ user: req.user._id }`) across all queries.
 
 ### 🟡 Partial
 - Express baseline error handler and health endpoint `/health`.
@@ -102,6 +108,6 @@ npm run dev
 
 ### ⏳ What's Left
 - Database connection configuration (`mongoose.connect`).
-- Cart & Order API routes and controllers.
+- Order API routes and controllers.
 - Client-side pages (Home, Shop, Product Detail, Cart, Checkout, Auth, Admin Dashboard).
 - Redux slices (Auth slice, Cart slice, Product slice).
