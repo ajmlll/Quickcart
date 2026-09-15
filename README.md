@@ -1,113 +1,127 @@
 # QuickCart
 
-QuickCart is a modern full-stack e-commerce web application built using a Node.js/Express backend and a React/TypeScript frontend.
+QuickCart is a modern full-stack e-commerce web application built using a Node.js/Express backend with MongoDB and a React/TypeScript frontend with Tailwind CSS and Redux Toolkit.
 
 ---
 
-## Tech Stack
+## 🚀 Tech Stack
 
 ### Frontend (`/client`)
 - **Core Framework:** React 19 + TypeScript (Vite)
 - **Styling:** Tailwind CSS v4
 - **State Management:** Redux Toolkit (`@reduxjs/toolkit`, `react-redux`)
 - **Routing:** React Router DOM (`react-router-dom`)
+- **HTTP Client:** Custom typed `fetch` wrapper (`credentials: 'include'`)
 
 ### Backend (`/server`)
 - **Runtime:** Node.js
 - **Framework:** Express.js
-- **Database / ODM:** MongoDB & Mongoose
+- **Database & ODM:** MongoDB & Mongoose
 - **Validation:** Zod
-- **Authentication & Security:** bcrypt, JSON Web Token (`jsonwebtoken`), `cookie-parser`, `cors`
+- **Authentication & Security:** `bcrypt` (12 rounds), JSON Web Token (`jsonwebtoken`), `cookie-parser`, `cors`
 - **Environment Management:** `dotenv`
 - **Development Tooling:** `nodemon`
 
 ---
 
-## Setup
+## ⚙️ Environment Variables & Setup
 
-### Prerequisites
-- Node.js (v18+ recommended)
-- npm (v9+ recommended)
-- MongoDB instance (Local or MongoDB Atlas)
+### Environment Variables (`server/.env`)
+Copy `server/.env.example` to `server/.env` and update the placeholders:
 
-### 1. Server Setup
+```env
+PORT=5000
+MONGO_URI=mongodb://localhost:27017/quickcart
+JWT_SECRET=quickcart_super_secret_jwt_key_2026
+CLIENT_ORIGIN=http://localhost:5173
+```
+
+---
+
+## 🛠️ Step-by-Step Local Setup
+
+### 1. Backend Setup & Seeding
+
 ```bash
-# Navigate to the server directory
+# Navigate to the server folder
 cd server
 
 # Install backend dependencies
 npm install
 
-# Set up environment variables
+# Create local .env from example template
 cp .env.example .env
-# Update .env with your local or remote MONGO_URI, JWT_SECRET, etc.
 
-# Seed database with initial products and admin account
+# Run the standalone database seed script (populates 18 products & admin user)
 npm run seed
 
-# Start development server
+# Start backend development server (http://localhost:5000)
 npm run dev
 ```
 
-### 2. Client Setup
+### 2. Frontend Setup
+
 ```bash
-# Navigate to the client directory
+# Navigate to the client folder (in a new terminal)
 cd client
 
 # Install frontend dependencies
 npm install
 
-# Start development server
+# Start frontend development server (http://localhost:5173)
 npm run dev
 ```
 
 ---
 
-## Admin Credentials
+## 🔑 Admin Login Credentials
+
+The database seed script initializes the default admin user with the following credentials:
 
 - **Email:** `admin@example.com`
 - **Password:** `Admin123!`
 - **Role:** `admin`
 
+---
+
+## 💡 Architectural Note on Cart Identifiers
+
+> [!IMPORTANT]
+> **Cart Product Line Identifiers:**  
+> The `PATCH /cart/:productId` and `DELETE /cart/:productId` endpoints accept the **product's Mongo ObjectId** (`:productId`) directly rather than a separate cart-line ID.  
+> Because each user's cart holds at most **one line item per product**, the `productId` uniquely identifies the line item within that specific user's cart.
 
 ---
 
-## Assumptions
+## 📐 Assumptions Made
 
-1. **Monorepo Architecture:** Clean separation into two dedicated folders: `/server` for API backend services and `/client` for frontend UI application.
-2. **Ports & Origins:** Server defaults to port `5000` (`http://localhost:5000`) and CORS allows requests from the Vite client origin `http://localhost:5173`.
-3. **Cookie-Based Authentication:** Tokens/cookies will be passed securely via `cookie-parser` and CORS credentials configured on Express.
+1. **Monorepo Structure:** Clean separation between `/server` (API services, Mongoose models, controllers) and `/client` (Vite, React, Redux Toolkit, Tailwind CSS).
+2. **Cookie-Based Authentication:** JWT tokens are stored in `httpOnly`, `sameSite: 'lax'` cookies named `'token'` (`secure: true` in production) to protect against XSS token theft.
+3. **Ownership-Isolation Guarantee:** Every database query for cart operations (`getCart`, `addToCart`, `updateCartItem`, `removeCartItem`) is strictly scoped by `{ user: req.user._id }`.
+4. **Server-Side Pricing Authority:** Cart line totals and grand totals are calculated dynamically on the server at request time (`product.price * quantity`). Client-sent prices or totals are never trusted or stored.
 
 ---
 
-## What's Done / Partial / Left
+## 📊 Status: What's Done / What's Partial / What's Left
 
 ### ✅ What's Done
-- Monorepo folder structure initialized (`/server` and `/client`).
-- Backend skeleton created with `package.json`, `app.js`, CORS configuration, `cookie-parser`, `express.json()` middleware, and centralized error-handling middleware.
-- Server `.env.example` created with `PORT`, `MONGO_URI`, `JWT_SECRET`, and `CLIENT_ORIGIN` variables.
-- Client scaffolded using Vite (React + TypeScript template).
-- Client dependencies installed: Tailwind CSS v4 (`@tailwindcss/vite`), React Router DOM (`react-router-dom`), and Redux Toolkit (`@reduxjs/toolkit`, `react-redux`).
-- Baseline Redux store (`client/src/store/store.ts`) and React Router setup configured.
-- Created Mongoose schemas and models (`User`, `Product`, `Cart`) with indexes.
-- Implemented Authentication middleware (`requireAuth`, `requireAdmin`) and routes (`POST /auth/register`, `POST /auth/login`, `POST /auth/logout`) with Zod validation, bcrypt password hashing (12 rounds), auto-creation of empty user Cart on register, JWT signing (7-day expiry), and httpOnly cookie management.
-- Implemented Product management routes (`/products`):
-  - `GET /products` (Public: search regex filter, minPrice/maxPrice filtering, sorting by price/name/date).
-  - `POST /products` (Admin: Zod validation for name, category, price > 0, stock >= 0, image).
-  - `PATCH /products/:id` (Admin: ObjectId 400 validation, 404 handling, partial updates).
-  - `DELETE /products/:id` (Admin: ObjectId 400 validation, 404 handling, deletion confirmation).
-  - All handlers wrapped in `try/catch` passing unexpected errors to `next(err)`.
-- Implemented Protected Cart Page Component ([`client/src/pages/CartPage.tsx`](file:///c:/Users/muham/OneDrive/Desktop/Quickcart/client/src/pages/CartPage.tsx)):
-  - Protected route requiring authentication (redirects unauthenticated users to `/login`).
-  - Dispatches `fetchCart()` on mount and displays cart items (`name`, `price`, `itemTotal`, quantity controls, remove button).
-  - Running item count + server-calculated total (`total` read directly from slice state — no client total recalculation).
-  - Stock ceiling enforcement: disables `+` quantity button when `quantity >= stock` and displays stock limit badges.
-  - Surfacing rejection error messages (e.g. `409` stock limit warnings) in a dedicated alert banner with dismissal action.
-  - Distinct state handling: Loading state (skeleton rows), Error state (with "Try Again" retry button), and Empty Cart state (with link back to product grid).
+- **Monorepo Setup**: Full folder structure with server and client configured.
+- **Database & Schemas**: `User`, `Product`, and `Cart` Mongoose models with unique indexes on `user` (Cart) and `email` (User).
+- **Authentication System**: `POST /auth/register`, `POST /auth/login`, `POST /auth/logout`, and `GET /auth/me` with Zod validation, `bcrypt` password hashing (12 rounds), auto-creation of empty Cart on registration, and `httpOnly` cookie management.
+- **Product Management**: `GET /products` (supports debounced search, min/max price range, and sorting), `POST /products` (Admin), `PATCH /products/:id` (Admin), `DELETE /products/:id` (Admin).
+- **Cart System**: `GET /cart`, `POST /cart`, `PATCH /cart/:productId`, `DELETE /cart/:productId` with stock ceiling checks, HTTP `409` conflict responses for stock overruns, and 100% ownership isolation.
+- **Database Seeding**: Standalone script (`server/seed.js`) that clears existing products, inserts the 18 product dataset (including out-of-stock item), and creates the default admin user.
+- **Frontend RTK & API Layer**: Typed `fetch` wrapper with `credentials: 'include'`, `authSlice`, `cartSlice`, `productSlice`, and custom hooks (`useAppDispatch`, `useAppSelector`).
+- **Routing & Navigation**: `App.tsx` router setup (`/`, `/login`, `/register`, `/cart`), `ProtectedRoute` component with loading states, and responsive navbar header (`Header.tsx`) with mobile menu drawer.
+- **Product Grid Home Page**: Hero banner, debounced search (300ms), sort dropdown, out-of-stock badges, and auth-gated "Add to Cart" button.
+- **Protected Cart Page**: Running item count, stock ceiling enforcement, `409` stock limit alert banner, and distinct states for Loading, Fetch Error (with retry button), and Empty Cart.
+- **Security & Error Handling**: Stripped stack traces from all response bodies, return `400` for invalid ObjectIDs, `401` for unauthorized cart requests, `403` for non-admin requests to admin routes, and `409` for duplicate emails or stock overruns.
 
-### 🟡 Partial
-- Express baseline error handler and health endpoint `/health`.
+### 🟡 What's Partial
+- **Error Middleware**: Centralized Express error handler and baseline health check endpoint (`/health`).
+- **Checkout Trigger**: Client-side UI checkout trigger button (ready for order placement integration).
 
 ### ⏳ What's Left
-- Order API routes and controllers.
-- Checkout flow & Admin dashboard features.
+- **Order Management System**: Order model (`Order.js`) and API endpoints (`POST /orders`, `GET /orders`, `GET /orders/:id`) for completing purchases and clearing carts.
+- **Payment Integration**: Third-party payment gateway processing (e.g. Stripe or Razorpay integration).
+- **Admin Management Dashboard**: Admin UI pages for creating, editing, and deleting products directly from the web interface.
