@@ -24,6 +24,11 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     return <Navigate to="/login" replace />;
   }
 
+  // Admins do not access user shopping cart pages; redirect them to /admin
+  if (user.role === 'admin') {
+    return <Navigate to="/admin" replace />;
+  }
+
   return <>{children}</>;
 };
 

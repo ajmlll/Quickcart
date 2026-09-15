@@ -10,12 +10,22 @@ export const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Admin pages use a dedicated sidebar layout instead of the consumer header navbar
+  if (location.pathname.startsWith('/admin')) {
+    return null;
+  }
+
   const cartItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   const handleLogout = async () => {
     setMobileMenuOpen(false);
+    const userRole = user?.role;
     await dispatch(logout());
-    navigate('/shop');
+    if (userRole === 'admin') {
+      navigate('/login');
+    } else {
+      navigate('/');
+    }
   };
 
   return (
