@@ -11,7 +11,6 @@ import AuthRequiredModal from '../components/AuthRequiredModal';
 import { SearchIcon, FilterIcon, CartIcon, CheckIcon, CloseIcon } from '../components/Icons';
 
 const CATEGORIES = ['All', 'Accessories', 'Audio', 'Office', 'Displays', 'Storage', 'Wearables'];
-const ITEMS_PER_PAGE = 10;
 
 export const HomePage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -25,6 +24,22 @@ export const HomePage: React.FC = () => {
   const [addingId, setAddingId] = useState<string | null>(null);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < 768;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const itemsPerPage = isMobile ? 10 : 9;
 
   const dispatch = useAppDispatch();
 
@@ -116,9 +131,9 @@ export const HomePage: React.FC = () => {
   });
 
   // Pagination calculation
-  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE) || 1;
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentProducts = filteredProducts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage) || 1;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentProducts = filteredProducts.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <div className="min-h-[calc(100vh-4rem)] text-neutral-900 p-4 sm:p-6 lg:p-8 font-sans">
@@ -303,7 +318,7 @@ export const HomePage: React.FC = () => {
             {/* STATE 2: Loading Skeletons */}
             {status === 'loading' && (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
-                {Array.from({ length: 10 }).map((_, idx) => (
+                {Array.from({ length: itemsPerPage }).map((_, idx) => (
                   <GlassCard key={idx} className="p-3 sm:p-4 space-y-3 sm:space-y-4 animate-pulse bg-white/80">
                     <div className="w-full h-36 sm:h-48 bg-neutral-200/60 rounded-xl"></div>
                     <div className="h-3.5 bg-neutral-200/60 rounded w-3/4"></div>
