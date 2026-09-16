@@ -23,11 +23,19 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   }
 
   if (!user) {
+    const handleClose = () => {
+      if (window.history.length > 1) {
+        navigate(-1);
+      } else {
+        navigate('/');
+      }
+    };
+
     return (
       <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4 font-sans">
         <AuthRequiredModal
           isOpen={true}
-          onClose={() => navigate('/shop')}
+          onClose={handleClose}
           title="Cart Requires Login"
           message="You need to log in or create an account to view and manage your shopping cart."
         />
