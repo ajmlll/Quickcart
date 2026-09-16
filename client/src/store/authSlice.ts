@@ -39,6 +39,7 @@ export const fetchCurrentUser = createAsyncThunk(
       return response.user;
     } catch (error) {
       if (error instanceof ApiError && error.statusCode === 401) {
+        localStorage.removeItem('quickcart_token');
         return null;
       }
       if (error instanceof ApiError) {
@@ -53,7 +54,10 @@ export const login = createAsyncThunk(
   'auth/login',
   async (credentials: LoginCredentials, { rejectWithValue }) => {
     try {
-      const response = await api.post<{ success: boolean; user: User }>('/auth/login', credentials);
+      const response = await api.post<{ success: boolean; token?: string; user: User }>('/auth/login', credentials);
+      if (response.token) {
+        localStorage.setItem('quickcart_token', response.token);
+      }
       return response.user;
     } catch (error) {
       if (error instanceof ApiError) {
@@ -68,7 +72,10 @@ export const register = createAsyncThunk(
   'auth/register',
   async (credentials: RegisterCredentials, { rejectWithValue }) => {
     try {
-      const response = await api.post<{ success: boolean; user: User }>('/auth/register', credentials);
+      const response = await api.post<{ success: boolean; token?: string; user: User }>('/auth/register', credentials);
+      if (response.token) {
+        localStorage.setItem('quickcart_token', response.token);
+      }
       return response.user;
     } catch (error) {
       if (error instanceof ApiError) {
@@ -84,8 +91,10 @@ export const logout = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       await api.post<{ success: boolean; message: string }>('/auth/logout');
+      localStorage.removeItem('quickcart_token');
       return null;
     } catch (error) {
+      localStorage.removeItem('quickcart_token');
       if (error instanceof ApiError) {
         return rejectWithValue(error.message);
       }

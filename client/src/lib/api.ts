@@ -23,6 +23,11 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
     headers.set('Content-Type', 'application/json');
   }
 
+  const token = localStorage.getItem('quickcart_token');
+  if (token && !headers.has('Authorization')) {
+    headers.set('Authorization', `Bearer ${token}`);
+  }
+
   const config: RequestInit = {
     ...options,
     headers,

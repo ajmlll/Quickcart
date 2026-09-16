@@ -27,17 +27,19 @@ const sendTokenResponse = (user, statusCode, res) => {
     { expiresIn: '7d' }
   );
 
+  const isProduction = process.env.NODE_ENV === 'production';
   const cookieOptions = {
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: isProduction ? 'none' : 'lax',
+    secure: isProduction,
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in ms
-    secure: process.env.NODE_ENV === 'production',
   };
 
   res.cookie('token', token, cookieOptions);
 
   return res.status(statusCode).json({
     success: true,
+    token,
     user: {
       id: user._id,
       name: user.name,
@@ -145,10 +147,11 @@ export const login = async (req, res, next) => {
  */
 export const logout = async (req, res, next) => {
   try {
+    const isProduction = process.env.NODE_ENV === 'production';
     res.clearCookie('token', {
       httpOnly: true,
-      sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
+      sameSite: isProduction ? 'none' : 'lax',
+      secure: isProduction,
     });
 
     return res.status(200).json({
