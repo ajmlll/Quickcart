@@ -11,7 +11,7 @@ import AuthRequiredModal from '../components/AuthRequiredModal';
 import { SearchIcon, FilterIcon, CartIcon, CheckIcon, CloseIcon } from '../components/Icons';
 
 const CATEGORIES = ['All', 'Accessories', 'Audio', 'Office', 'Displays', 'Storage', 'Wearables'];
-const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 10;
 
 export const HomePage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -303,7 +303,7 @@ export const HomePage: React.FC = () => {
             {/* STATE 2: Loading Skeletons */}
             {status === 'loading' && (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
-                {Array.from({ length: 6 }).map((_, idx) => (
+                {Array.from({ length: 10 }).map((_, idx) => (
                   <GlassCard key={idx} className="p-3 sm:p-4 space-y-3 sm:space-y-4 animate-pulse bg-white/80">
                     <div className="w-full h-36 sm:h-48 bg-neutral-200/60 rounded-xl"></div>
                     <div className="h-3.5 bg-neutral-200/60 rounded w-3/4"></div>
