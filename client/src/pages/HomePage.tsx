@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   useAppDispatch,
   useAppSelector,
@@ -28,7 +27,6 @@ export const HomePage: React.FC = () => {
   const [authModalOpen, setAuthModalOpen] = useState(false);
 
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const { user } = useAppSelector((state) => state.auth);
   const { products, status, error } = useAppSelector((state) => state.products);
@@ -58,10 +56,31 @@ export const HomePage: React.FC = () => {
     dispatch(fetchProducts(params));
   }, [dispatch, debouncedSearch, selectedCategory, sortOption, minPrice, maxPrice]);
 
-  // Reset page to 1 whenever filters change
-  useEffect(() => {
+  // Filter handlers that reset page to 1
+  const handleCategorySelect = (cat: string) => {
+    setSelectedCategory(cat);
     setCurrentPage(1);
-  }, [selectedCategory, minPrice, maxPrice, inStockOnly, sortOption]);
+  };
+
+  const handleSortChange = (sort: string) => {
+    setSortOption(sort);
+    setCurrentPage(1);
+  };
+
+  const handleMinPriceChange = (val: string) => {
+    setMinPrice(val);
+    setCurrentPage(1);
+  };
+
+  const handleMaxPriceChange = (val: string) => {
+    setMaxPrice(val);
+    setCurrentPage(1);
+  };
+
+  const handleInStockChange = (checked: boolean) => {
+    setInStockOnly(checked);
+    setCurrentPage(1);
+  };
 
   const handleClearFilters = () => {
     setSearchTerm('');
@@ -152,7 +171,7 @@ export const HomePage: React.FC = () => {
               <span className="text-xs font-bold text-neutral-700 whitespace-nowrap">Sort By:</span>
               <select
                 value={sortOption}
-                onChange={(e) => setSortOption(e.target.value)}
+                onChange={(e) => handleSortChange(e.target.value)}
                 className="px-3.5 py-2 bg-white/90 border border-neutral-300 rounded-xl text-neutral-900 text-xs font-semibold focus:outline-none focus:border-neutral-900 transition cursor-pointer"
               >
                 <option value="">Featured</option>
@@ -169,7 +188,7 @@ export const HomePage: React.FC = () => {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Left Sidebar Filters (Fixed / Sticky on Desktop, Drawer on Mobile) */}
           <aside
-            className={`w-full lg:w-64 flex-shrink-0 space-y-6 lg:sticky lg:top-20 lg:h-[calc(100vh-6rem)] lg:overflow-y-auto ${
+            className={`w-full lg:w-64 flex-shrink-0 space-y-6 lg:sticky lg:top-20 self-start ${
               mobileFilterOpen ? 'block' : 'hidden lg:block'
             }`}
           >
@@ -198,7 +217,7 @@ export const HomePage: React.FC = () => {
                   {CATEGORIES.map((cat) => (
                     <button
                       key={cat}
-                      onClick={() => setSelectedCategory(cat)}
+                      onClick={() => handleCategorySelect(cat)}
                       className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold transition flex items-center justify-between cursor-pointer ${
                         selectedCategory === cat
                           ? 'bg-neutral-900 text-white font-bold shadow-xs'
@@ -225,7 +244,7 @@ export const HomePage: React.FC = () => {
                     <input
                       type="number"
                       value={minPrice}
-                      onChange={(e) => setMinPrice(e.target.value)}
+                      onChange={(e) => handleMinPriceChange(e.target.value)}
                       placeholder="₹ 0"
                       className="w-full px-2.5 py-1.5 bg-white border border-neutral-300 rounded-lg text-xs font-medium focus:outline-none focus:border-neutral-900"
                     />
@@ -237,7 +256,7 @@ export const HomePage: React.FC = () => {
                     <input
                       type="number"
                       value={maxPrice}
-                      onChange={(e) => setMaxPrice(e.target.value)}
+                      onChange={(e) => handleMaxPriceChange(e.target.value)}
                       placeholder="₹ 20000"
                       className="w-full px-2.5 py-1.5 bg-white border border-neutral-300 rounded-lg text-xs font-medium focus:outline-none focus:border-neutral-900"
                     />
@@ -251,7 +270,7 @@ export const HomePage: React.FC = () => {
                   <input
                     type="checkbox"
                     checked={inStockOnly}
-                    onChange={(e) => setInStockOnly(e.target.checked)}
+                    onChange={(e) => handleInStockChange(e.target.checked)}
                     className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-neutral-300 cursor-pointer"
                   />
                   <span>In Stock Items Only</span>
