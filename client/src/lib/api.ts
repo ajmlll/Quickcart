@@ -12,7 +12,8 @@ export class ApiError extends Error {
   }
 }
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const rawBaseUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+const BASE_URL = rawBaseUrl.replace(/\/$/, '');
 
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const url = endpoint.startsWith('http') ? endpoint : `${BASE_URL}${endpoint}`;
