@@ -203,9 +203,8 @@ export const HomePage: React.FC = () => {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Left Sidebar Filters (Compact & Fixed on Desktop, Drawer on Mobile) */}
           <aside
-            className={`w-full lg:w-60 flex-shrink-0 lg:sticky lg:top-20 self-start ${
-              mobileFilterOpen ? 'block' : 'hidden lg:block'
-            }`}
+            className={`w-full lg:w-60 flex-shrink-0 lg:sticky lg:top-20 self-start ${mobileFilterOpen ? 'block' : 'hidden lg:block'
+              }`}
           >
             <GlassCard className="p-4 space-y-3.5 bg-white/85">
               <div className="flex items-center justify-between pb-2 border-b border-neutral-200/80">
@@ -233,11 +232,10 @@ export const HomePage: React.FC = () => {
                     <button
                       key={cat}
                       onClick={() => handleCategorySelect(cat)}
-                      className={`w-full text-left px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-between cursor-pointer ${
-                        selectedCategory === cat
-                          ? 'bg-neutral-900 text-white shadow-xs'
-                          : 'text-neutral-700 hover:bg-neutral-100/80 bg-white/40'
-                      }`}
+                      className={`w-full text-left px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-between cursor-pointer ${selectedCategory === cat
+                        ? 'bg-neutral-900 text-white shadow-xs'
+                        : 'text-neutral-700 hover:bg-neutral-100/80 bg-white/40'
+                        }`}
                     >
                       <span>{cat}</span>
                       {selectedCategory === cat && <span className="text-[10px]">✓</span>}
@@ -398,13 +396,12 @@ export const HomePage: React.FC = () => {
                           <button
                             onClick={() => handleAddToCart(product)}
                             disabled={isOutOfStock || isAdding}
-                            className={`w-full py-2.5 sm:py-3 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-wider transition flex items-center justify-center gap-1.5 sm:gap-2 shadow-xs ${
-                              isOutOfStock
-                                ? 'bg-neutral-200 text-neutral-400 cursor-not-allowed border border-neutral-300'
-                                : isAdding
+                            className={`w-full py-2.5 sm:py-3 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-wider transition flex items-center justify-center gap-1.5 sm:gap-2 shadow-xs ${isOutOfStock
+                              ? 'bg-neutral-200 text-neutral-400 cursor-not-allowed border border-neutral-300'
+                              : isAdding
                                 ? 'bg-emerald-600 text-white'
                                 : 'bg-black hover:bg-neutral-800 text-white active:scale-[0.98] cursor-pointer'
-                            }`}
+                              }`}
                           >
                             {isAdding ? (
                               <>
@@ -452,11 +449,10 @@ export const HomePage: React.FC = () => {
                           <button
                             key={pageNum}
                             onClick={() => setCurrentPage(pageNum)}
-                            className={`w-8 h-8 rounded-xl text-xs font-bold transition ${
-                              currentPage === pageNum
-                                ? 'bg-black text-white shadow-xs'
-                                : 'bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-300'
-                            }`}
+                            className={`w-8 h-8 rounded-xl text-xs font-bold transition ${currentPage === pageNum
+                              ? 'bg-black text-white shadow-xs'
+                              : 'bg-white hover:bg-neutral-100 text-neutral-800 border border-neutral-300'
+                              }`}
                           >
                             {pageNum}
                           </button>
