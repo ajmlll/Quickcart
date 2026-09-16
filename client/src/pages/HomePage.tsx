@@ -58,7 +58,7 @@ export const HomePage: React.FC = () => {
 
   // Fetch products whenever debouncedSearch, selectedCategory, or sortOption changes
   useEffect(() => {
-    const params: Record<string, any> = {
+    const params: Record<string, string> = {
       search: debouncedSearch,
       sort: sortOption,
     };
