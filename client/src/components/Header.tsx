@@ -112,16 +112,16 @@ export const Header: React.FC = () => {
           {!isAuthPage && (
             <Link
               to="/cart"
-              className={`relative p-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center border ${
+              className={`relative p-2 rounded-xl text-xs font-bold transition flex items-center justify-center border ${
                 location.pathname === '/cart'
                   ? 'text-indigo-600 bg-indigo-50/80 border-indigo-100 shadow-xs'
                   : 'text-neutral-700 bg-white/70 border-white/90 hover:bg-white'
               }`}
               title="View Shopping Cart"
             >
-              <CartIcon size={20} />
+              <CartIcon size={18} />
               {cartItemCount > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 min-w-[20px] h-[20px] px-1 flex items-center justify-center text-[10px] font-black rounded-full bg-indigo-600 text-white shadow-xs leading-none">
+                <span className="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 flex items-center justify-center text-[9px] font-black rounded-full bg-indigo-600 text-white shadow-xs leading-none">
                   {cartItemCount}
                 </span>
               )}

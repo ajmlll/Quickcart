@@ -208,23 +208,24 @@ export const HomePage: React.FC = () => {
                 )}
               </div>
 
-              {/* Category Filter Pills */}
+              {/* Category Filter - One per line */}
               <div className="space-y-2">
                 <h3 className="text-[10px] font-extrabold uppercase tracking-wider text-neutral-500">
                   CATEGORY
                 </h3>
-                <div className="flex flex-wrap gap-1">
+                <div className="space-y-1">
                   {CATEGORIES.map((cat) => (
                     <button
                       key={cat}
                       onClick={() => handleCategorySelect(cat)}
-                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer ${
+                      className={`w-full text-left px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center justify-between cursor-pointer ${
                         selectedCategory === cat
                           ? 'bg-neutral-900 text-white shadow-xs'
-                          : 'bg-white/80 text-neutral-700 hover:bg-neutral-100 border border-neutral-200/70'
+                          : 'text-neutral-700 hover:bg-neutral-100/80 bg-white/40'
                       }`}
                     >
-                      {cat}
+                      <span>{cat}</span>
+                      {selectedCategory === cat && <span className="text-[10px]">✓</span>}
                     </button>
                   ))}
                 </div>
