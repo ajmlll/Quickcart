@@ -302,13 +302,13 @@ export const HomePage: React.FC = () => {
 
             {/* STATE 2: Loading Skeletons */}
             {status === 'loading' && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
                 {Array.from({ length: 6 }).map((_, idx) => (
-                  <GlassCard key={idx} className="p-4 space-y-4 animate-pulse bg-white/80">
-                    <div className="w-full h-48 bg-neutral-200/60 rounded-xl"></div>
-                    <div className="h-4 bg-neutral-200/60 rounded w-3/4"></div>
+                  <GlassCard key={idx} className="p-3 sm:p-4 space-y-3 sm:space-y-4 animate-pulse bg-white/80">
+                    <div className="w-full h-36 sm:h-48 bg-neutral-200/60 rounded-xl"></div>
+                    <div className="h-3.5 bg-neutral-200/60 rounded w-3/4"></div>
                     <div className="h-3 bg-neutral-200/60 rounded w-1/2"></div>
-                    <div className="h-10 bg-neutral-200/60 rounded-xl w-full pt-2"></div>
+                    <div className="h-9 bg-neutral-200/60 rounded-xl w-full pt-1"></div>
                   </GlassCard>
                 ))}
               </div>
@@ -334,7 +334,7 @@ export const HomePage: React.FC = () => {
             {/* SUCCESS STATE: Product Listing Grid (Modelled after reference image) */}
             {status === 'succeeded' && currentProducts.length > 0 && (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6">
                   {currentProducts.map((product) => {
                     const isOutOfStock = product.stock === 0;
                     const isAdding = addingId === product._id;
@@ -343,11 +343,11 @@ export const HomePage: React.FC = () => {
                       <GlassCard
                         key={product._id}
                         hoverEffect
-                        className="group p-4 flex flex-col justify-between bg-white/85 border border-white/90 shadow-xs"
+                        className="group p-3 sm:p-4 flex flex-col justify-between bg-white/85 border border-white/90 shadow-xs"
                       >
-                        <div className="space-y-3">
+                        <div className="space-y-2.5 sm:space-y-3">
                           {/* Image Container */}
-                          <div className="relative w-full h-52 rounded-xl overflow-hidden bg-neutral-100/90 flex items-center justify-center border border-neutral-100">
+                          <div className="relative w-full h-36 sm:h-52 rounded-xl overflow-hidden bg-neutral-100/90 flex items-center justify-center border border-neutral-100">
                             <img
                               src={product.image}
                               alt={product.name}
@@ -355,35 +355,35 @@ export const HomePage: React.FC = () => {
                               loading="lazy"
                             />
                             {isOutOfStock ? (
-                              <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wider bg-rose-600 text-white shadow-xs">
+                              <div className="absolute top-2 left-2 sm:top-3 sm:left-3 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-rose-600 text-white shadow-xs">
                                 OUT OF STOCK
                               </div>
                             ) : (
-                              <div className="absolute top-3 left-3 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-neutral-900/90 text-white backdrop-blur-xs shadow-xs">
+                              <div className="absolute top-2 left-2 sm:top-3 sm:left-3 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-neutral-900/90 text-white backdrop-blur-xs shadow-xs">
                                 {product.category}
                               </div>
                             )}
                           </div>
 
                           {/* Product Details */}
-                          <div className="space-y-1">
-                            <h3 className="font-black text-neutral-900 text-base uppercase tracking-tight leading-snug group-hover:text-indigo-600 transition-colors line-clamp-1">
+                          <div className="space-y-0.5 sm:space-y-1">
+                            <h3 className="font-black text-neutral-900 text-xs sm:text-base uppercase tracking-tight leading-snug group-hover:text-indigo-600 transition-colors line-clamp-1">
                               {product.name}
                             </h3>
                             <div className="flex items-center justify-between">
-                              <span className="text-lg font-black text-neutral-900">
+                              <span className="text-sm sm:text-lg font-black text-neutral-900">
                                 ₹{product.price.toFixed(2)}
                               </span>
                             </div>
                           </div>
                         </div>
 
-                        {/* Full-width ADD TO CART Button (Reference design pattern) */}
-                        <div className="pt-4 border-t border-neutral-200/60 mt-4">
+                        {/* Full-width ADD TO CART Button */}
+                        <div className="pt-2.5 sm:pt-4 border-t border-neutral-200/60 mt-3 sm:mt-4">
                           <button
                             onClick={() => handleAddToCart(product)}
                             disabled={isOutOfStock || isAdding}
-                            className={`w-full py-3 rounded-xl text-xs font-black uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-xs ${
+                            className={`w-full py-2.5 sm:py-3 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-wider transition flex items-center justify-center gap-1.5 sm:gap-2 shadow-xs ${
                               isOutOfStock
                                 ? 'bg-neutral-200 text-neutral-400 cursor-not-allowed border border-neutral-300'
                                 : isAdding
@@ -393,14 +393,14 @@ export const HomePage: React.FC = () => {
                           >
                             {isAdding ? (
                               <>
-                                <CheckIcon size={16} />
-                                <span>ADDED TO CART</span>
+                                <CheckIcon size={14} />
+                                <span>ADDED</span>
                               </>
                             ) : isOutOfStock ? (
                               <span>OUT OF STOCK</span>
                             ) : (
                               <>
-                                <CartIcon size={16} />
+                                <CartIcon size={14} />
                                 <span>ADD TO CART</span>
                               </>
                             )}

@@ -257,21 +257,6 @@ export const Header: React.FC = () => {
                 </div>
               </div>
 
-              {!isAuthPage && (
-                <Link
-                  to="/cart"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition text-center ${
-                    location.pathname === '/cart'
-                      ? 'bg-indigo-50 text-indigo-700 border border-indigo-100'
-                      : 'bg-white/70 text-neutral-800 border border-white/80'
-                  }`}
-                >
-                  <CartIcon size={18} />
-                  <span>Cart</span> {cartItemCount > 0 ? `(${cartItemCount})` : ''}
-                </Link>
-              )}
-
               <button
                 onClick={handleLogout}
                 className="w-full py-2.5 rounded-xl bg-rose-50/80 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-black uppercase tracking-wider transition cursor-pointer"
