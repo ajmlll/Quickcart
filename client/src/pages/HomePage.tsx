@@ -432,7 +432,7 @@ export const HomePage: React.FC = () => {
                     <span className="text-xs font-bold text-neutral-600">
                       Showing <strong className="text-neutral-900">{startIndex + 1}</strong> -{' '}
                       <strong className="text-neutral-900">
-                        {Math.min(startIndex + ITEMS_PER_PAGE, filteredProducts.length)}
+                        {Math.min(startIndex + itemsPerPage, filteredProducts.length)}
                       </strong>{' '}
                       of <strong className="text-neutral-900">{filteredProducts.length}</strong> Products
                     </span>
