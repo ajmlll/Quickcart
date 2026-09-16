@@ -186,59 +186,58 @@ export const HomePage: React.FC = () => {
 
         {/* Main Content Layout: Left Filter Sidebar + Right Products Grid */}
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Left Sidebar Filters (Fixed / Sticky on Desktop, Drawer on Mobile) */}
+          {/* Left Sidebar Filters (Compact & Fixed on Desktop, Drawer on Mobile) */}
           <aside
-            className={`w-full lg:w-64 flex-shrink-0 space-y-6 lg:sticky lg:top-20 self-start ${
+            className={`w-full lg:w-60 flex-shrink-0 lg:sticky lg:top-20 self-start ${
               mobileFilterOpen ? 'block' : 'hidden lg:block'
             }`}
           >
-            <GlassCard className="p-5 space-y-6 bg-white/85">
-              <div className="flex items-center justify-between pb-3 border-b border-neutral-200/80">
-                <h2 className="font-black text-sm uppercase tracking-wider text-neutral-900 flex items-center gap-2">
-                  <span>⚡</span>
+            <GlassCard className="p-4 space-y-3.5 bg-white/85">
+              <div className="flex items-center justify-between pb-2 border-b border-neutral-200/80">
+                <h2 className="font-black text-xs uppercase tracking-wider text-neutral-900 flex items-center gap-1.5">
+                  <FilterIcon size={14} />
                   <span>FILTERS</span>
                 </h2>
                 {(selectedCategory !== 'All' || minPrice || maxPrice || inStockOnly || searchTerm) && (
                   <button
                     onClick={handleClearFilters}
-                    className="text-xs font-bold text-indigo-600 hover:underline cursor-pointer"
+                    className="text-[11px] font-bold text-indigo-600 hover:underline cursor-pointer"
                   >
                     Clear All
                   </button>
                 )}
               </div>
 
-              {/* Category Filter */}
-              <div className="space-y-3">
-                <h3 className="text-xs font-extrabold uppercase tracking-wider text-neutral-600">
+              {/* Category Filter Pills */}
+              <div className="space-y-2">
+                <h3 className="text-[10px] font-extrabold uppercase tracking-wider text-neutral-500">
                   CATEGORY
                 </h3>
-                <div className="space-y-1">
+                <div className="flex flex-wrap gap-1">
                   {CATEGORIES.map((cat) => (
                     <button
                       key={cat}
                       onClick={() => handleCategorySelect(cat)}
-                      className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold transition flex items-center justify-between cursor-pointer ${
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer ${
                         selectedCategory === cat
-                          ? 'bg-neutral-900 text-white font-bold shadow-xs'
-                          : 'text-neutral-700 hover:bg-neutral-100/80'
+                          ? 'bg-neutral-900 text-white shadow-xs'
+                          : 'bg-white/80 text-neutral-700 hover:bg-neutral-100 border border-neutral-200/70'
                       }`}
                     >
-                      <span>{cat}</span>
-                      {selectedCategory === cat && <span className="text-[10px]">✓</span>}
+                      {cat}
                     </button>
                   ))}
                 </div>
               </div>
 
               {/* Price Range Filter */}
-              <div className="space-y-3 pt-4 border-t border-neutral-200/60">
-                <h3 className="text-xs font-extrabold uppercase tracking-wider text-neutral-600">
+              <div className="space-y-2 pt-2.5 border-t border-neutral-200/60">
+                <h3 className="text-[10px] font-extrabold uppercase tracking-wider text-neutral-500">
                   PRICE RANGE (₹)
                 </h3>
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="block text-[10px] font-bold text-neutral-500 uppercase mb-1">
+                    <label className="block text-[9px] font-bold text-neutral-400 uppercase mb-0.5">
                       Min Price
                     </label>
                     <input
@@ -246,11 +245,11 @@ export const HomePage: React.FC = () => {
                       value={minPrice}
                       onChange={(e) => handleMinPriceChange(e.target.value)}
                       placeholder="₹ 0"
-                      className="w-full px-2.5 py-1.5 bg-white border border-neutral-300 rounded-lg text-xs font-medium focus:outline-none focus:border-neutral-900"
+                      className="w-full px-2 py-1 bg-white border border-neutral-300 rounded-lg text-xs font-medium focus:outline-none focus:border-neutral-900"
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold text-neutral-500 uppercase mb-1">
+                    <label className="block text-[9px] font-bold text-neutral-400 uppercase mb-0.5">
                       Max Price
                     </label>
                     <input
@@ -258,20 +257,20 @@ export const HomePage: React.FC = () => {
                       value={maxPrice}
                       onChange={(e) => handleMaxPriceChange(e.target.value)}
                       placeholder="₹ 20000"
-                      className="w-full px-2.5 py-1.5 bg-white border border-neutral-300 rounded-lg text-xs font-medium focus:outline-none focus:border-neutral-900"
+                      className="w-full px-2 py-1 bg-white border border-neutral-300 rounded-lg text-xs font-medium focus:outline-none focus:border-neutral-900"
                     />
                   </div>
                 </div>
               </div>
 
               {/* In Stock Only Checkbox */}
-              <div className="pt-4 border-t border-neutral-200/60">
+              <div className="pt-2.5 border-t border-neutral-200/60">
                 <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-neutral-800">
                   <input
                     type="checkbox"
                     checked={inStockOnly}
                     onChange={(e) => handleInStockChange(e.target.checked)}
-                    className="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-neutral-300 cursor-pointer"
+                    className="w-3.5 h-3.5 rounded text-indigo-600 focus:ring-indigo-500 border-neutral-300 cursor-pointer"
                   />
                   <span>In Stock Items Only</span>
                 </label>
