@@ -26,6 +26,20 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Base health / placeholder check
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'QuickCart API Server is running',
+    frontend: clientOrigin,
+    endpoints: {
+      health: '/health',
+      auth: '/auth',
+      products: '/products',
+      cart: '/cart',
+    },
+  });
+});
+
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok', message: 'QuickCart server is running' });
 });

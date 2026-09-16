@@ -180,3 +180,29 @@ export const deleteProduct = async (req, res, next) => {
     next(error);
   }
 };
+
+/**
+ * @desc    Get all distinct product categories stored in DB
+ * @route   GET /products/categories
+ * @access  Public
+ */
+export const getCategories = async (req, res, next) => {
+  try {
+    const categories = await Product.distinct('category');
+    const cleanCategories = categories
+      .filter((cat) => typeof cat === 'string' && cat.trim() !== '')
+      .map((cat) => cat.trim());
+    
+    // De-duplicate and sort alphabetically
+    const uniqueCategories = Array.from(new Set(cleanCategories)).sort();
+
+    return res.status(200).json({
+      success: true,
+      count: uniqueCategories.length,
+      categories: uniqueCategories,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+

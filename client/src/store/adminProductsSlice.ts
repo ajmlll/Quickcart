@@ -17,6 +17,7 @@ export interface UpdateProductInput {
 
 export interface AdminProductsState {
   products: Product[];
+  categories: string[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   actionStatus: 'idle' | 'submitting' | 'succeeded' | 'failed';
   error: string | null;
@@ -25,11 +26,28 @@ export interface AdminProductsState {
 
 const initialState: AdminProductsState = {
   products: [],
+  categories: [],
   status: 'idle',
   actionStatus: 'idle',
   error: null,
   successMessage: null,
 };
+
+// GET /products/categories
+export const fetchCategories = createAsyncThunk(
+  'adminProducts/fetchCategories',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get<{ success: boolean; categories: string[] }>('/products/categories');
+      return response.categories;
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue('Failed to fetch categories');
+    }
+  }
+);
 
 // GET /products
 export const fetchAllAdminProducts = createAsyncThunk(
@@ -50,12 +68,13 @@ export const fetchAllAdminProducts = createAsyncThunk(
 // POST /products (Admin only)
 export const createAdminProduct = createAsyncThunk(
   'adminProducts/create',
-  async (productData: CreateProductInput, { rejectWithValue }) => {
+  async (productData: CreateProductInput, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.post<{ success: boolean; message: string; product: Product }>(
         '/products',
         productData
       );
+      dispatch(fetchCategories());
       return response.product;
     } catch (error) {
       if (error instanceof ApiError) {
@@ -69,12 +88,13 @@ export const createAdminProduct = createAsyncThunk(
 // PATCH /products/:id (Admin only)
 export const updateAdminProduct = createAsyncThunk(
   'adminProducts/update',
-  async ({ id, data }: UpdateProductInput, { rejectWithValue }) => {
+  async ({ id, data }: UpdateProductInput, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.patch<{ success: boolean; message: string; product: Product }>(
         `/products/${id}`,
         data
       );
+      dispatch(fetchCategories());
       return response.product;
     } catch (error) {
       if (error instanceof ApiError) {
@@ -88,9 +108,10 @@ export const updateAdminProduct = createAsyncThunk(
 // DELETE /products/:id (Admin only)
 export const deleteAdminProduct = createAsyncThunk(
   'adminProducts/delete',
-  async (id: string, { rejectWithValue }) => {
+  async (id: string, { dispatch, rejectWithValue }) => {
     try {
       await api.delete<{ success: boolean; message: string }>(`/products/${id}`);
+      dispatch(fetchCategories());
       return id;
     } catch (error) {
       if (error instanceof ApiError) {
@@ -113,6 +134,10 @@ const adminProductsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Fetch Categories
+      .addCase(fetchCategories.fulfilled, (state, action: PayloadAction<string[]>) => {
+        state.categories = action.payload;
+      })
       // Fetch All
       .addCase(fetchAllAdminProducts.pending, (state) => {
         state.status = 'loading';
@@ -179,3 +204,4 @@ const adminProductsSlice = createSlice({
 
 export const { clearAdminStatus } = adminProductsSlice.actions;
 export default adminProductsSlice.reducer;
+

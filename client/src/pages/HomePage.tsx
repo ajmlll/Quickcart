@@ -8,9 +8,11 @@ import {
   type Product,
 } from '../store';
 import GlassCard from '../components/GlassCard';
+import AuthRequiredModal from '../components/AuthRequiredModal';
+import { SearchIcon, FilterIcon, CartIcon, CheckIcon, CloseIcon } from '../components/Icons';
 
 const CATEGORIES = ['All', 'Accessories', 'Audio', 'Office', 'Displays', 'Storage', 'Wearables'];
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 9;
 
 export const HomePage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -23,6 +25,7 @@ export const HomePage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [addingId, setAddingId] = useState<string | null>(null);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -73,7 +76,7 @@ export const HomePage: React.FC = () => {
 
   const handleAddToCart = async (product: Product) => {
     if (!user) {
-      navigate('/login');
+      setAuthModalOpen(true);
       return;
     }
 
@@ -116,16 +119,16 @@ export const HomePage: React.FC = () => {
             {/* Mobile Filter Toggle */}
             <button
               onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
-              className="lg:hidden px-4 py-2.5 rounded-xl bg-white border border-neutral-300 text-neutral-800 text-xs font-bold flex items-center gap-2"
+              className="lg:hidden px-4 py-2.5 rounded-xl bg-white border border-neutral-300 text-neutral-800 text-xs font-bold flex items-center gap-2 cursor-pointer"
             >
-              <span>⚙️</span>
+              <FilterIcon size={16} />
               <span>{mobileFilterOpen ? 'Close Filters' : 'Filter Options'}</span>
             </button>
 
             {/* Search Input */}
             <div className="relative w-full sm:w-64">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 text-sm">
-                🔍
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400">
+                <SearchIcon size={16} />
               </span>
               <input
                 type="text"
@@ -137,9 +140,9 @@ export const HomePage: React.FC = () => {
               {searchTerm && (
                 <button
                   onClick={() => setSearchTerm('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700 text-xs"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700 cursor-pointer"
                 >
-                  ✕
+                  <CloseIcon size={14} />
                 </button>
               )}
             </div>
@@ -164,9 +167,9 @@ export const HomePage: React.FC = () => {
 
         {/* Main Content Layout: Left Filter Sidebar + Right Products Grid */}
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Left Sidebar Filters (Desktop & Mobile Drawer) */}
+          {/* Left Sidebar Filters (Fixed / Sticky on Desktop, Drawer on Mobile) */}
           <aside
-            className={`w-full lg:w-64 flex-shrink-0 space-y-6 ${
+            className={`w-full lg:w-64 flex-shrink-0 space-y-6 lg:sticky lg:top-20 lg:h-[calc(100vh-6rem)] lg:overflow-y-auto ${
               mobileFilterOpen ? 'block' : 'hidden lg:block'
             }`}
           >
@@ -280,7 +283,7 @@ export const HomePage: React.FC = () => {
 
             {/* STATE 2: Loading Skeletons */}
             {status === 'loading' && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 {Array.from({ length: 6 }).map((_, idx) => (
                   <GlassCard key={idx} className="p-4 space-y-4 animate-pulse bg-white/80">
                     <div className="w-full h-48 bg-neutral-200/60 rounded-xl"></div>
@@ -312,7 +315,7 @@ export const HomePage: React.FC = () => {
             {/* SUCCESS STATE: Product Listing Grid (Modelled after reference image) */}
             {status === 'succeeded' && currentProducts.length > 0 && (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                   {currentProducts.map((product) => {
                     const isOutOfStock = product.stock === 0;
                     const isAdding = addingId === product._id;
@@ -352,9 +355,6 @@ export const HomePage: React.FC = () => {
                               <span className="text-lg font-black text-neutral-900">
                                 ₹{product.price.toFixed(2)}
                               </span>
-                              <span className={`text-[11px] font-bold ${isOutOfStock ? 'text-rose-600' : 'text-neutral-500'}`}>
-                                {isOutOfStock ? 'Stock: 0' : `Stock: ${product.stock}`}
-                              </span>
                             </div>
                           </div>
                         </div>
@@ -374,14 +374,14 @@ export const HomePage: React.FC = () => {
                           >
                             {isAdding ? (
                               <>
-                                <span>✓</span>
+                                <CheckIcon size={16} />
                                 <span>ADDED TO CART</span>
                               </>
                             ) : isOutOfStock ? (
                               <span>OUT OF STOCK</span>
                             ) : (
                               <>
-                                <span>🛒</span>
+                                <CartIcon size={16} />
                                 <span>ADD TO CART</span>
                               </>
                             )}
@@ -444,6 +444,13 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <AuthRequiredModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        title="Login Required"
+        message="Please log in or create an account to add items to your shopping cart."
+      />
     </div>
   );
 };

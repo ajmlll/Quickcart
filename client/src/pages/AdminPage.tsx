@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector, type RootState, logout } from '../store';
 import {
   fetchAllAdminProducts,
+  fetchCategories,
   createAdminProduct,
   updateAdminProduct,
   deleteAdminProduct,
@@ -16,7 +17,7 @@ export const AdminPage: React.FC = () => {
   const navigate = useNavigate();
 
   const { user } = useAppSelector((state: RootState) => state.auth);
-  const { products, status, actionStatus, error, successMessage } = useAppSelector(
+  const { products, categories: dbCategories, status, actionStatus, error, successMessage } = useAppSelector(
     (state: RootState) => state.adminProducts
   );
 
@@ -32,13 +33,22 @@ export const AdminPage: React.FC = () => {
   // Form State
   const [name, setName] = useState('');
   const [category, setCategory] = useState('');
+  const [isCustomCategory, setIsCustomCategory] = useState(false);
   const [price, setPrice] = useState('');
   const [stock, setStock] = useState('');
   const [image, setImage] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
 
+  // Derive unique categories stored in DB
+  const availableCategories = Array.from(
+    new Set([...dbCategories, ...products.map((p: Product) => p.category)])
+  )
+    .filter(Boolean)
+    .sort();
+
   useEffect(() => {
     dispatch(fetchAllAdminProducts());
+    dispatch(fetchCategories());
   }, [dispatch]);
 
   const handleAdminLogout = async () => {
@@ -49,7 +59,9 @@ export const AdminPage: React.FC = () => {
   const openAddModal = () => {
     setEditingProduct(null);
     setName('');
-    setCategory('Accessories');
+    const defaultCat = availableCategories[0] || 'Accessories';
+    setCategory(defaultCat);
+    setIsCustomCategory(false);
     setPrice('');
     setStock('');
     setImage('');
@@ -62,6 +74,11 @@ export const AdminPage: React.FC = () => {
     setEditingProduct(product);
     setName(product.name);
     setCategory(product.category);
+    if (availableCategories.includes(product.category)) {
+      setIsCustomCategory(false);
+    } else {
+      setIsCustomCategory(true);
+    }
     setPrice(String(product.price));
     setStock(String(product.stock));
     setImage(product.image || '');
@@ -69,6 +86,7 @@ export const AdminPage: React.FC = () => {
     dispatch(clearAdminStatus());
     setIsModalOpen(true);
   };
+
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -575,16 +593,46 @@ export const AdminPage: React.FC = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1">
-                    Category *
+                    Category (From DB) *
                   </label>
-                  <input
-                    type="text"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    placeholder="e.g. Audio, Office"
-                    className="w-full px-3.5 py-2 bg-neutral-50 border border-neutral-300 focus:bg-white focus:border-indigo-600 rounded-xl text-sm transition"
-                  />
+                  <select
+                    value={isCustomCategory ? '__NEW__' : category}
+                    onChange={(e) => {
+                      if (e.target.value === '__NEW__') {
+                        setIsCustomCategory(true);
+                        setCategory('');
+                      } else {
+                        setIsCustomCategory(false);
+                        setCategory(e.target.value);
+                      }
+                    }}
+                    className="w-full px-3.5 py-2 bg-neutral-50 border border-neutral-300 focus:bg-white focus:border-indigo-600 rounded-xl text-sm font-medium transition cursor-pointer"
+                  >
+                    {availableCategories.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                    <option value="__NEW__">➕ Add New Category...</option>
+                  </select>
+
+                  {isCustomCategory && (
+                    <div className="mt-2">
+                      <input
+                        type="text"
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                        placeholder="Enter new category name..."
+                        className="w-full px-3.5 py-2 bg-white border border-indigo-500 focus:outline-none rounded-xl text-sm transition"
+                        autoFocus
+                      />
+                      <p className="text-[10px] text-neutral-500 mt-1">
+                        New category will be saved to DB automatically.
+                      </p>
+                    </div>
+                  )}
                 </div>
+
 
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1">
